@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id            String            @id @default(cuid())
+  name          String?
+  email         String?           @unique
+  emailVerified DateTime?
+  image         String?
+  githubLogin   String?           @unique
+  githubId      Int?              @unique
+  plan          UserPlan          @default(FREE)
+  accounts      Account[]
+  sessions      Session[]
+  sandboxes     Sandbox[]
+  reports       ReadinessReport[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+enum UserPlan {
+  FREE
+  PREMIUM
+}
+
+model Challenge {
+  id               String     @id @default(cuid())
+  slug             String     @unique
+  title            String
+  description      String     @db.Text
+  difficulty       Difficulty
+  estimatedMinutes Int
+  stack            String[]
+  templateRepo     String
+  instructions     String     @db.Text
+  isActive         Boolean    @default(true)
+  sandboxes        Sandbox[]
+  createdAt        DateTime   @default(now())
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Sandbox {
+  id           String        @id @default(cuid())
+  userId       String
+  challengeId  String
+  codespaceId  String?       @unique
+  codespaceUrl String?
+  forkRepo     String?
+  status       SandboxStatus @default(PROVISIONING)
+  startedAt    DateTime      @default(now())
+  submittedAt  DateTime?
+  finishedAt   DateTime?
+  user         User          @relation(fields: [userId], references: [id])
+  challenge    Challenge     @relation(fields: [challengeId], references: [id])
+  events       SandboxEvent[]
+  report       ReadinessReport?
+
+  @@unique([userId, challengeId])
+}
+
+enum SandboxStatus {
+  PROVISIONING
+  READY
+  IN_PROGRESS
+  SUBMITTED
+  EVALUATED
+  FAILED
+}
+
+model SandboxEvent {
+  id         String   @id @default(cuid())
+  sandboxId  String
+  type       String
+  payload    Json
+  receivedAt DateTime @default(now())
+  sandbox    Sandbox  @relation(fields: [sandboxId], references: [id], onDelete: Cascade)
+}
+
+model ReadinessReport {
+  id               String   @id @default(cuid())
+  sandboxId        String   @unique
+  userId           String
+  scoreTotal       Float
+  scoreGit         Float
+  scoreTests       Float
+  scoreCodeQuality Float
+  scoreDocs        Float
+  scoreDelivery    Float
+  feedback         Json
+  pdfUrl           String?
+  certified        Boolean  @default(false)
+  sandbox          Sandbox  @relation(fields: [sandboxId], references: [id])
+  user             User     @relation(fields: [userId], references: [id])
+  createdAt        DateTime @default(now())
+}
+
+model Company {
+  id        String      @id @default(cuid())
+  name      String
+  email     String      @unique
+  plan      CompanyPlan @default(TRIAL)
+  stripeId  String?
+  filters   CandidateFilter[]
+  createdAt DateTime    @default(now())
+}
+
+enum CompanyPlan {
+  TRIAL
+  ACTIVE
+  CANCELLED
+}
+
+model CandidateFilter {
+  id         String   @id @default(cuid())
+  companyId  String
+  minScore   Float    @default(70)
+  challenges String[]
+  company    Company  @relation(fields: [companyId], references: [id])
+  createdAt  DateTime @default(now())
+}
