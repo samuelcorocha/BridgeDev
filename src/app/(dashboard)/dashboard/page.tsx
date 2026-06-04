@@ -46,7 +46,7 @@ export default async function DashboardPage() {
       </div>
 
       {sandboxes.length === 0 ? (
-        <div className="text-center py-16 bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 rounded-xl">
+        <div className="text-center py-16 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md border border-zinc-100 dark:border-zinc-800 rounded-xl transition-shadow duration-200">
           <p className="text-zinc-500 dark:text-zinc-400 mb-4">Comece seu primeiro desafio agora</p>
           <Button asChild variant="outline" className="border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400">
             <Link href="/challenges">Ver desafios disponíveis</Link>
