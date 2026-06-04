@@ -3,6 +3,24 @@ import { db } from "@/lib/db"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
+const STATUS_STYLES: Record<string, string> = {
+  PROVISIONING: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+  READY:        "bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-400",
+  IN_PROGRESS:  "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400",
+  SUBMITTED:    "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400",
+  EVALUATED:    "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400",
+  FAILED:       "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400",
+}
+
+const STATUS_LABELS: Record<string, string> = {
+  PROVISIONING: "Provisionando",
+  READY:        "Pronto",
+  IN_PROGRESS:  "Em andamento",
+  SUBMITTED:    "Submetido",
+  EVALUATED:    "Avaliado",
+  FAILED:       "Falhou",
+}
+
 export default async function DashboardPage() {
   const session = await getRequiredSession()
 
@@ -43,9 +61,9 @@ export default async function DashboardPage() {
             >
               <div>
                 <p className="font-medium text-sm">{sandbox.challenge.title}</p>
-                <p className="text-xs text-zinc-400 mt-0.5 capitalize">
-                  {sandbox.status.toLowerCase().replace("_", " ")}
-                </p>
+                <span className={`inline-block text-xs px-2 py-0.5 rounded font-medium mt-1 ${STATUS_STYLES[sandbox.status] ?? STATUS_STYLES.PROVISIONING}`}>
+                  {STATUS_LABELS[sandbox.status] ?? sandbox.status}
+                </span>
               </div>
               <div className="flex items-center gap-3">
                 {sandbox.report && (
