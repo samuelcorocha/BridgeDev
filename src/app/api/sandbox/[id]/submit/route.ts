@@ -23,7 +23,8 @@ export async function POST(
     return NextResponse.json({ error: "Não encontrado" }, { status: 404 })
   }
 
-  if (sandbox.status !== "IN_PROGRESS" && sandbox.status !== "READY") {
+  const allowedStatuses = ["IN_PROGRESS", "READY", "EVALUATED"]
+  if (!allowedStatuses.includes(sandbox.status)) {
     return NextResponse.json(
       { error: "Sandbox não pode ser submetido neste estado" },
       { status: 409 }

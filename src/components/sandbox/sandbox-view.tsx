@@ -35,10 +35,8 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
   }, [polling, sandbox.id, router])
 
   async function handleSubmit() {
-    const res = await fetch(`/api/sandbox/${sandbox.id}/submit`, {
-      method: "POST",
-    })
-    if (res.ok) setSandbox((s) => ({ ...s, status: "SUBMITTED" }))
+    const res = await fetch(`/api/sandbox/${sandbox.id}/submit`, { method: "POST" })
+    if (res.ok) setSandbox((s) => ({ ...s, status: "SUBMITTED", report: null }))
   }
 
   async function handleReset() {
@@ -60,20 +58,23 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
         </p>
       </div>
 
-      {(sandbox.status === "READY" || sandbox.status === "IN_PROGRESS") && (
-        <div className="flex gap-3">
+      {sandbox.codespaceUrl && (
+        <div className="flex flex-wrap gap-3">
           <Button asChild>
-            <a
-              href={sandbox.codespaceUrl!}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={sandbox.codespaceUrl} target="_blank" rel="noopener noreferrer">
               Abrir Codespace
             </a>
           </Button>
-          <Button variant="outline" onClick={handleSubmit}>
-            Submeter Desafio
-          </Button>
+          {(sandbox.status === "READY" || sandbox.status === "IN_PROGRESS") && (
+            <Button variant="outline" onClick={handleSubmit}>
+              Submeter Desafio
+            </Button>
+          )}
+          {sandbox.status === "EVALUATED" && (
+            <Button variant="outline" onClick={handleSubmit}>
+              Re-submeter
+            </Button>
+          )}
         </div>
       )}
 
