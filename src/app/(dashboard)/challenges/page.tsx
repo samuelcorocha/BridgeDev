@@ -75,17 +75,11 @@ export default async function ChallengesPage() {
                   <Link
                     href={
                       sandbox
-                        ? sandbox.status === "EVALUATED"
-                          ? `/reports/${sandbox.id}`
-                          : `/sandbox/${sandbox.id}`
+                        ? `/sandbox/${sandbox.id}`
                         : `/challenges/${challenge.slug}`
                     }
                   >
-                    {sandbox
-                      ? sandbox.status === "EVALUATED"
-                        ? "Ver resultado"
-                        : "Continuar"
-                      : "Iniciar"}
+                    {sandbox ? "Continuar" : "Iniciar"}
                   </Link>
                 </Button>
               </div>
