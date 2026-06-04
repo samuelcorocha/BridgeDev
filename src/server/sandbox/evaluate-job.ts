@@ -18,19 +18,22 @@ export const evaluateSandbox = inngest.createFunction(
 
     const score = calculateScore(sandbox)
 
-    await db.readinessReport.create({
-      data: {
-        sandboxId,
-        userId: sandbox.userId,
-        scoreTotal: score.total,
-        scoreGit: score.git,
-        scoreTests: score.tests,
-        scoreCodeQuality: score.codeQuality,
-        scoreDocs: score.docs,
-        scoreDelivery: score.delivery,
-        feedback: score.feedback as unknown as import("@prisma/client").Prisma.InputJsonValue,
-        certified: score.total >= 70,
-      },
+    const reportData = {
+      userId: sandbox.userId,
+      scoreTotal: score.total,
+      scoreGit: score.git,
+      scoreTests: score.tests,
+      scoreCodeQuality: score.codeQuality,
+      scoreDocs: score.docs,
+      scoreDelivery: score.delivery,
+      feedback: score.feedback as unknown as import("@prisma/client").Prisma.InputJsonValue,
+      certified: score.total >= 70,
+    }
+
+    await db.readinessReport.upsert({
+      where: { sandboxId },
+      create: { sandboxId, ...reportData },
+      update: reportData,
     })
 
     await db.sandbox.update({
