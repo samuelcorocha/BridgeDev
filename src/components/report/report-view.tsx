@@ -22,21 +22,22 @@ export function ReportView({ report }: { report: ReportWithDeps }) {
 
   return (
     <div className="space-y-8 max-w-3xl">
-      <div className="flex items-start justify-between">
+      {/* Banner */}
+      <div className="rounded-xl bg-gradient-to-br from-violet-950 via-violet-800 to-purple-700 p-6 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Relatório de Prontidão</h1>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-white">Relatório de Prontidão</h1>
+          <p className="text-white/70 text-sm mt-1">
             {report.sandbox.challenge.title} · Emitido em {issuedAt}
           </p>
         </div>
-        <Button asChild variant="outline" size="sm" className="border-blue-300 dark:border-blue-800 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 hover:border-blue-400">
+        <Button asChild variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 shrink-0">
           <a href={`/api/reports/${report.sandboxId}/pdf`} download>
             Baixar PDF
           </a>
         </Button>
       </div>
 
-      <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 p-6 flex items-center gap-6">
+      <div className="bg-white dark:bg-zinc-900 shadow-md border border-violet-100 dark:border-violet-900 rounded-xl p-6 flex items-center gap-6">
         <ScoreGauge score={report.scoreTotal} />
         <div>
           <p className={`text-5xl font-bold ${
