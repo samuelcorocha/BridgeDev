@@ -24,7 +24,11 @@ export default async function ChallengesPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Desafios</h1>
+      {/* Banner */}
+      <div className="rounded-xl bg-gradient-to-br from-violet-950 via-violet-800 to-purple-700 p-6">
+        <h1 className="text-2xl font-bold text-white">Desafios</h1>
+        <p className="text-white/70 text-sm mt-1">Escolha um ambiente para testar sua prontidão técnica</p>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {challenges.map((challenge) => {
@@ -33,7 +37,7 @@ export default async function ChallengesPage() {
           return (
             <div
               key={challenge.id}
-              className="border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 flex flex-col gap-4 bg-white dark:bg-zinc-900 hover:border-violet-300 dark:hover:border-violet-800 transition-colors"
+              className="bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md border border-zinc-100 dark:border-zinc-800 rounded-xl p-5 flex flex-col gap-4 hover:border-violet-200 dark:hover:border-violet-800 transition-all duration-200"
             >
               <div>
                 <div className="flex justify-between items-start gap-2">
