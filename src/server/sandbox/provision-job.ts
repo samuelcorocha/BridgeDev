@@ -1,6 +1,5 @@
 import { Octokit } from "@octokit/rest"
 import { inngest } from "@/lib/inngest"
-import { getGithubClient } from "@/lib/github"
 import { db } from "@/lib/db"
 import { env } from "@/lib/env"
 
@@ -34,7 +33,6 @@ export const provisionSandbox = inngest.createFunction(
 
     // Usa token OAuth do usuário para criar o fork na conta pessoal dele
     const userGh = new Octokit({ auth: account.access_token })
-    const appGh = getGithubClient()
 
     const [templateOwner, templateRepoName] = sandbox.challenge.templateRepo.split("/")
     const forkName = `bridgedev-${sandbox.challenge.slug}`

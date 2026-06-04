@@ -1,7 +1,6 @@
 import type { EvaluatorInput, DimensionResult } from "../types"
 
 const CONFIG_FILES = [".eslintrc", ".eslintrc.js", ".eslintrc.json", ".eslintrc.yml", "eslint.config", ".prettierrc", ".prettierrc.js", "prettier.config"]
-const SMELL_PATTERNS = ["console.log", "var ", "eval(", "setTimeout(0", "any>"]
 
 export function scoreCodeQuality(input: EvaluatorInput): DimensionResult {
   const points: string[] = []
