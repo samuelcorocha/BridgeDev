@@ -49,7 +49,13 @@ export default async function DashboardPage() {
               </div>
               <div className="flex items-center gap-3">
                 {sandbox.report && (
-                  <span className="text-sm font-semibold text-zinc-700">
+                  <span className={`text-sm font-bold tabular-nums ${
+                    sandbox.report.scoreTotal >= 80
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : sandbox.report.scoreTotal >= 60
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}>
                     {sandbox.report.scoreTotal.toFixed(1)} pts
                   </span>
                 )}
