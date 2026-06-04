@@ -8,3 +8,8 @@ body {
   background: #ffffff;
   color: #09090b;
 }
+
+.dark body {
+  background: #09090b;
+  color: #fafafa;
+}
