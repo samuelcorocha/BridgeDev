@@ -16,7 +16,8 @@ export function ScoreGauge({ score }: Props) {
         cy="60"
         r={radius}
         fill="none"
-        stroke="#e5e7eb"
+        stroke="currentColor"
+        className="text-zinc-200 dark:text-zinc-700"
         strokeWidth="10"
       />
       <circle

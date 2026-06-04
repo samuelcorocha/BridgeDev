@@ -16,7 +16,7 @@ export function DimensionCard({ label, score, points, improvements }: Props) {
       : "text-red-600 dark:text-red-400"
 
   return (
-    <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 p-4 space-y-3">
+    <div className="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 space-y-3">
       <div className="flex justify-between items-center">
         <h3 className="font-medium text-sm">{label}</h3>
         <span className={`font-bold text-lg ${scoreColor}`}>{score.toFixed(0)}</span>
