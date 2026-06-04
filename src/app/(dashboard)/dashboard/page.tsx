@@ -20,7 +20,7 @@ export default async function DashboardPage() {
         <h1 className="text-2xl font-bold">
           Olá, {session.user.name?.split(" ")[0]}
         </h1>
-        <p className="text-zinc-500 text-sm mt-1">
+        <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1">
           {sandboxes.length === 0
             ? "Você ainda não iniciou nenhum desafio."
             : `${completed} desafio${completed !== 1 ? "s" : ""} concluído${completed !== 1 ? "s" : ""}`}
@@ -29,8 +29,8 @@ export default async function DashboardPage() {
 
       {sandboxes.length === 0 ? (
         <div className="text-center py-16 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900">
-          <p className="text-zinc-500 mb-4">Comece seu primeiro desafio agora</p>
-          <Button asChild>
+          <p className="text-zinc-500 dark:text-zinc-400 mb-4">Comece seu primeiro desafio agora</p>
+          <Button asChild variant="outline" className="border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400">
             <Link href="/challenges">Ver desafios disponíveis</Link>
           </Button>
         </div>
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
           {sandboxes.map((sandbox) => (
             <div
               key={sandbox.id}
-              className="flex items-center justify-between border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 bg-white dark:bg-zinc-900"
+              className="flex items-center justify-between border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 bg-white dark:bg-zinc-900"
             >
               <div>
                 <p className="font-medium text-sm">{sandbox.challenge.title}</p>
@@ -59,17 +59,18 @@ export default async function DashboardPage() {
                     {sandbox.report.scoreTotal.toFixed(1)} pts
                   </span>
                 )}
-                <Button asChild variant="outline" size="sm">
-                  <Link
-                    href={
-                      sandbox.status === "EVALUATED"
-                        ? `/reports/${sandbox.id}`
-                        : `/sandbox/${sandbox.id}`
-                    }
-                  >
-                    {sandbox.status === "EVALUATED"
-                      ? "Ver Relatório"
-                      : "Continuar"}
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className={
+                    sandbox.status === "EVALUATED"
+                      ? "border-blue-300 dark:border-blue-800 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 hover:border-blue-400"
+                      : "border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400"
+                  }
+                >
+                  <Link href={sandbox.status === "EVALUATED" ? `/reports/${sandbox.id}` : `/sandbox/${sandbox.id}`}>
+                    {sandbox.status === "EVALUATED" ? "Ver Relatório" : "Continuar"}
                   </Link>
                 </Button>
               </div>

@@ -15,7 +15,12 @@ export function StartChallengeButton({ challengeId, existingSandboxId }: Props) 
 
   if (existingSandboxId) {
     return (
-      <Button onClick={() => router.push(`/sandbox/${existingSandboxId}`)} size="lg">
+      <Button
+        variant="outline"
+        size="lg"
+        onClick={() => router.push(`/sandbox/${existingSandboxId}`)}
+        className="border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400"
+      >
         Continuar Desafio
       </Button>
     )
@@ -38,7 +43,13 @@ export function StartChallengeButton({ challengeId, existingSandboxId }: Props) 
   }
 
   return (
-    <Button onClick={handleStart} disabled={loading} size="lg">
+    <Button
+      variant="outline"
+      size="lg"
+      onClick={handleStart}
+      disabled={loading}
+      className="border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400"
+    >
       {loading ? "Preparando ambiente..." : "Iniciar Desafio"}
     </Button>
   )

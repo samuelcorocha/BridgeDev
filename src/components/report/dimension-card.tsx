@@ -8,24 +8,24 @@ interface Props {
 }
 
 export function DimensionCard({ label, score, points, improvements }: Props) {
-  const color =
+  const scoreColor =
     score >= 80
-      ? "text-green-600"
+      ? "text-emerald-600 dark:text-emerald-400"
       : score >= 60
-        ? "text-yellow-600"
-        : "text-red-600"
+      ? "text-amber-600 dark:text-amber-400"
+      : "text-red-600 dark:text-red-400"
 
   return (
-    <div className="border border-zinc-200 rounded-lg p-4 space-y-3">
+    <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 p-4 space-y-3">
       <div className="flex justify-between items-center">
         <h3 className="font-medium text-sm">{label}</h3>
-        <span className={`font-bold text-lg ${color}`}>{score.toFixed(0)}</span>
+        <span className={`font-bold text-lg ${scoreColor}`}>{score.toFixed(0)}</span>
       </div>
 
       {points.length > 0 && (
         <ul className="space-y-1">
           {points.map((p, i) => (
-            <li key={i} className="flex gap-2 text-xs text-green-700">
+            <li key={i} className="flex gap-2 text-xs text-emerald-700 dark:text-emerald-400">
               <CheckCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
               {p}
             </li>
@@ -36,7 +36,7 @@ export function DimensionCard({ label, score, points, improvements }: Props) {
       {improvements.length > 0 && (
         <ul className="space-y-1">
           {improvements.map((p, i) => (
-            <li key={i} className="flex gap-2 text-xs text-yellow-700">
+            <li key={i} className="flex gap-2 text-xs text-amber-700 dark:text-amber-400">
               <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" />
               {p}
             </li>

@@ -91,8 +91,8 @@ export default async function ChallengesPage() {
                 <Button
                   asChild
                   size="sm"
-                  className={sandbox ? "" : "bg-violet-600 hover:bg-violet-700 text-white"}
-                  variant={sandbox ? "outline" : "default"}
+                  variant="outline"
+                  className="border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400"
                 >
                   <Link href={sandbox ? `/sandbox/${sandbox.id}` : `/challenges/${challenge.slug}`}>
                     {sandbox ? "Continuar" : "Iniciar desafio"}
