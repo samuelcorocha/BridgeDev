@@ -41,6 +41,12 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
     if (res.ok) setSandbox((s) => ({ ...s, status: "SUBMITTED" }))
   }
 
+  async function handleReset() {
+    if (!confirm("Resetar o desafio apaga todo o progresso. Continuar?")) return
+    const res = await fetch(`/api/sandbox/${sandbox.id}`, { method: "DELETE" })
+    if (res.ok) router.push(`/challenges/${sandbox.challenge.slug}`)
+  }
+
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
@@ -76,6 +82,12 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
           <a href={`/reports/${sandbox.id}`}>Ver Relatório de Prontidão</a>
         </Button>
       )}
+
+      <div className="pt-4 border-t border-zinc-200">
+        <Button variant="outline" onClick={handleReset} className="text-red-600 hover:text-red-700 hover:border-red-300">
+          Resetar Desafio
+        </Button>
+      </div>
 
       {sandbox.status === "PROVISIONING" && (
         <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4 text-sm text-zinc-500 space-y-1">
