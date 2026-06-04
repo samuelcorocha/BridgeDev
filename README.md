@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BridgeDev
 
-## Getting Started
+Plataforma SaaS de simulação de ambientes corporativos para desenvolvedores em formação. Estudantes resolvem desafios técnicos em sandboxes e recebem um **Relatório de Prontidão** que valida autonomia técnica para recrutadores.
 
-First, run the development server:
+## Stack
+
+| Camada | Tecnologia |
+|---|---|
+| Full-stack | Next.js 14 (App Router), TypeScript strict |
+| UI | Tailwind CSS, shadcn/ui |
+| Auth | NextAuth.js (GitHub OAuth) |
+| Banco | Supabase (PostgreSQL) + Prisma ORM |
+| Sandbox | GitHub Codespaces API |
+| Jobs | Inngest (serverless) |
+| PDF | @react-pdf/renderer |
+| Deploy | Vercel + Supabase |
+
+## Desenvolvimento
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm dev          # servidor de desenvolvimento (localhost:3000)
+pnpm build        # build de produção
+pnpm test         # testes com Vitest
+pnpm lint         # ESLint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Banco de dados
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm db:push      # sincroniza schema Prisma → banco
+pnpm db:migrate   # cria e aplica migration
+pnpm db:studio    # abre Prisma Studio
+pnpm db:seed      # popula dados iniciais
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Variáveis de ambiente
 
-## Learn More
+Copie `.env.example` para `.env.local` e preencha:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cp .env.example .env.local
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Variável | Descrição |
+|---|---|
+| `DATABASE_URL` | Connection string do Supabase |
+| `NEXTAUTH_SECRET` | Secret para NextAuth |
+| `GITHUB_CLIENT_ID` | OAuth App do GitHub |
+| `GITHUB_CLIENT_SECRET` | OAuth App do GitHub |
+| `GITHUB_WEBHOOK_SECRET` | Secret para validação HMAC dos webhooks |
+| `NEXT_PUBLIC_APP_URL` | URL pública da aplicação |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estrutura
 
-## Deploy on Vercel
+```
+src/
+  app/              # Next.js App Router
+    api/            # Route handlers
+    (auth)/         # Login
+    (dashboard)/    # Área logada (dashboard, desafios, sandbox, relatórios)
+  components/       # Componentes React
+  lib/              # Clientes e utilitários compartilhados
+  server/           # Lógica server-only (evaluator, sandbox, pdf)
+  types/            # Tipos TypeScript
+prisma/
+  schema.prisma
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Fluxo principal
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+Login GitHub OAuth
+  → Catálogo de desafios
+  → Iniciar desafio (provisiona Codespace via API)
+  → Desenvolvedor trabalha no Codespace
+  → Webhooks GitHub capturam push / PR / check_run
+  → Submeter desafio → Readiness Score calculado
+  → Relatório de Prontidão gerado (PDF exportável)
+```
+
+## Readiness Score
+
+| Dimensão | Peso |
+|---|---|
+| Git Discipline | 25% |
+| Test Coverage | 25% |
+| Code Quality | 20% |
+| Documentation | 15% |
+| Delivery | 15% |
+
+Mínimo para certificado: **70 pontos**.
