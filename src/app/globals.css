@@ -3,3 +3,5 @@
 @theme inline {
   --font-sans: var(--font-geist);
 }
+
+@variant dark (&:where(.dark, .dark *));
