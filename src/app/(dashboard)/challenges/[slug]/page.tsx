@@ -28,16 +28,15 @@ export default async function ChallengeDetailPage({
 
   return (
     <div className="max-w-2xl space-y-6">
-      <div>
+      {/* Banner */}
+      <div className="rounded-xl bg-gradient-to-br from-violet-950 via-violet-800 to-purple-700 p-6">
         <div className="flex items-center gap-3 mb-1">
-          <h1 className="text-2xl font-bold">{challenge.title}</h1>
+          <h1 className="text-2xl font-bold text-white">{challenge.title}</h1>
           <span className={`text-xs px-2 py-0.5 rounded font-medium ${DIFFICULTY_COLORS[challenge.difficulty]}`}>
             {DIFFICULTY_LABELS[challenge.difficulty]}
           </span>
         </div>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          {challenge.estimatedMinutes} minutos estimados
-        </p>
+        <p className="text-white/70 text-sm">{challenge.estimatedMinutes} minutos estimados</p>
       </div>
 
       <div className="flex flex-wrap gap-1.5">
@@ -53,7 +52,7 @@ export default async function ChallengeDetailPage({
 
       <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">{challenge.description}</p>
 
-      <div className="border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900 p-5">
+      <div className="bg-white dark:bg-zinc-900 shadow-sm border border-violet-100 dark:border-violet-900 rounded-xl p-5">
         <h2 className="font-semibold text-sm uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mb-3">
           Instruções
         </h2>
