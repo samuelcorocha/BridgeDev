@@ -28,7 +28,7 @@ export default async function DashboardPage() {
       </div>
 
       {sandboxes.length === 0 ? (
-        <div className="text-center py-16 border border-zinc-200 rounded-xl bg-white">
+        <div className="text-center py-16 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-zinc-900">
           <p className="text-zinc-500 mb-4">Comece seu primeiro desafio agora</p>
           <Button asChild>
             <Link href="/challenges">Ver desafios disponíveis</Link>
@@ -39,7 +39,7 @@ export default async function DashboardPage() {
           {sandboxes.map((sandbox) => (
             <div
               key={sandbox.id}
-              className="flex items-center justify-between border border-zinc-200 rounded-lg p-4 bg-white"
+              className="flex items-center justify-between border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 bg-white dark:bg-zinc-900"
             >
               <div>
                 <p className="font-medium text-sm">{sandbox.challenge.title}</p>

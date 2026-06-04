@@ -38,7 +38,7 @@ export default async function ChallengesPage() {
           return (
             <div
               key={challenge.id}
-              className="border border-zinc-200 rounded-xl p-5 flex flex-col gap-4 bg-white"
+              className="border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 flex flex-col gap-4 bg-white dark:bg-zinc-900"
             >
               <div>
                 <div className="flex justify-between items-start gap-2">
