@@ -60,18 +60,18 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
 
       {sandbox.codespaceUrl && (
         <div className="flex flex-wrap gap-3">
-          <Button asChild>
+          <Button asChild variant="outline" className="border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400">
             <a href={sandbox.codespaceUrl} target="_blank" rel="noopener noreferrer">
               Abrir Codespace
             </a>
           </Button>
           {(sandbox.status === "READY" || sandbox.status === "IN_PROGRESS") && (
-            <Button variant="outline" onClick={handleSubmit}>
+            <Button variant="outline" onClick={handleSubmit} className="border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:border-emerald-400">
               Submeter Desafio
             </Button>
           )}
           {sandbox.status === "EVALUATED" && (
-            <Button variant="outline" onClick={handleSubmit}>
+            <Button variant="outline" onClick={handleSubmit} className="border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950 hover:border-amber-400">
               Re-submeter
             </Button>
           )}
@@ -79,13 +79,13 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
       )}
 
       {sandbox.status === "EVALUATED" && sandbox.report && (
-        <Button asChild>
+        <Button asChild variant="outline" className="border-blue-300 dark:border-blue-800 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 hover:border-blue-400">
           <a href={`/reports/${sandbox.id}`}>Ver Relatório de Prontidão</a>
         </Button>
       )}
 
       <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
-        <Button variant="outline" onClick={handleReset} className="text-red-600 hover:text-red-700 hover:border-red-300">
+        <Button variant="outline" onClick={handleReset} className="border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-400">
           Resetar Desafio
         </Button>
       </div>
