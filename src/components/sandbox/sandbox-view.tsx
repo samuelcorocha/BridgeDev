@@ -47,19 +47,16 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <div>
-        <h1 className="text-2xl font-bold">{sandbox.challenge.title}</h1>
-        <p
-          className={`text-sm mt-1 ${
-            polling ? "text-zinc-400 animate-pulse" : "text-zinc-500"
-          }`}
-        >
+      {/* Banner */}
+      <div className="rounded-xl bg-gradient-to-br from-violet-950 via-violet-800 to-purple-700 p-6">
+        <h1 className="text-2xl font-bold text-white">{sandbox.challenge.title}</h1>
+        <p className={`text-sm mt-1 ${polling ? "text-white/50 animate-pulse" : "text-white/70"}`}>
           {STATUS_LABELS[sandbox.status] ?? sandbox.status}
         </p>
       </div>
 
       {sandbox.codespaceUrl && (
-        <div className="flex flex-wrap gap-3">
+        <div className="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 rounded-xl p-5 flex flex-wrap gap-3">
           <Button asChild variant="outline" className="border-violet-300 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400">
             <a href={sandbox.codespaceUrl} target="_blank" rel="noopener noreferrer">
               Abrir Codespace
@@ -84,21 +81,15 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
         </Button>
       )}
 
-      <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
-        <Button variant="outline" onClick={handleReset} className="border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-400">
-          Resetar Desafio
-        </Button>
-      </div>
-
       {sandbox.status === "PROVISIONING" && (
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 text-sm text-zinc-500 dark:text-zinc-400 space-y-1">
+        <div className="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-sm text-zinc-500 dark:text-zinc-400 space-y-1">
           <p>Criando fork do repositório do desafio...</p>
           <p>Isso leva cerca de 30–60 segundos.</p>
         </div>
       )}
 
       {sandbox.challenge.instructions && (
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-5">
+        <div className="bg-white dark:bg-zinc-900 shadow-sm border border-violet-100 dark:border-violet-900 rounded-xl p-5">
           <h2 className="font-semibold mb-3 text-sm uppercase tracking-wide text-zinc-500">
             Instruções
           </h2>
@@ -107,6 +98,12 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
           </pre>
         </div>
       )}
+
+      <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
+        <Button variant="outline" onClick={handleReset} className="border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 hover:border-red-400">
+          Resetar Desafio
+        </Button>
+      </div>
     </div>
   )
 }
