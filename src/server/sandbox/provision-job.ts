@@ -48,39 +48,45 @@ export const provisionSandbox = inngest.createFunction(
     const forkOwner = githubLogin
 
     try {
-      // Cria fork do template na conta pessoal do usuário (ignora se já existir)
-      try {
+      // Verifica se o fork já existe antes de tentar criar
+      const forkExists = await userGh.repos
+        .get({ owner: forkOwner, repo: forkName })
+        .then(() => true)
+        .catch(() => false)
+
+      if (!forkExists) {
         await userGh.repos.createFork({
           owner: templateOwner,
           repo: templateRepoName,
           name: forkName,
           default_branch_only: true,
         })
-      } catch (err: unknown) {
-        const e = err as { status?: number }
-        if (e.status !== 422) throw err
-        // 422 = fork já existe na conta — continua normalmente
+        // GitHub cria forks de forma assíncrona
+        await new Promise((r) => setTimeout(r, 6000))
       }
 
-      // GitHub cria forks de forma assíncrona
-      await new Promise((r) => setTimeout(r, 6000))
+      // Verifica se o webhook já existe antes de tentar criar
+      const hooks = await userGh.repos
+        .listWebhooks({ owner: forkOwner, repo: forkName })
+        .then((r) => r.data)
+        .catch(() => [])
 
-      // Configura webhook no fork via token do usuário (ignora se já existir)
-      try {
+      const webhookUrl =
+        env.GITHUB_WEBHOOK_PROXY_URL ?? `${env.NEXT_PUBLIC_APP_URL}/api/webhooks/github`
+
+      const hookExists = hooks.some((h) => h.config.url === webhookUrl)
+
+      if (!hookExists) {
         await userGh.repos.createWebhook({
           owner: forkOwner,
           repo: forkName,
           config: {
-            url: env.GITHUB_WEBHOOK_PROXY_URL ?? `${env.NEXT_PUBLIC_APP_URL}/api/webhooks/github`,
+            url: webhookUrl,
             content_type: "json",
             secret: env.GITHUB_WEBHOOK_SECRET,
           },
           events: ["push", "pull_request", "check_run", "workflow_run"],
         })
-      } catch (err: unknown) {
-        const e = err as { status?: number }
-        if (e.status !== 422) throw err
-        // 422 = webhook já existe no repositório — continua normalmente
       }
 
       await db.sandbox.update({
