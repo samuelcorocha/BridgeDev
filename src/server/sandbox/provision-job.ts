@@ -17,11 +17,6 @@ export const provisionSandbox = inngest.createFunction(
       include: { challenge: true, user: true },
     })
 
-    if (!sandbox.user.githubLogin) {
-      await db.sandbox.update({ where: { id: sandboxId }, data: { status: "FAILED" } })
-      throw new Error("Usuário sem githubLogin")
-    }
-
     const account = await db.account.findFirst({
       where: { userId: sandbox.user.id, provider: "github" },
     })
@@ -34,9 +29,24 @@ export const provisionSandbox = inngest.createFunction(
     // Usa token OAuth do usuário para criar o fork na conta pessoal dele
     const userGh = new Octokit({ auth: account.access_token })
 
+    // Garante que o githubLogin está disponível — faz fallback à API se necessário
+    let githubLogin = sandbox.user.githubLogin
+    if (!githubLogin) {
+      const { data: ghUser } = await userGh.users.getAuthenticated()
+      githubLogin = ghUser.login
+      await db.user
+        .update({ where: { id: sandbox.user.id }, data: { githubLogin } })
+        .catch(() => null)
+    }
+
+    if (!githubLogin) {
+      await db.sandbox.update({ where: { id: sandboxId }, data: { status: "FAILED" } })
+      throw new Error("Não foi possível determinar o GitHub login do usuário")
+    }
+
     const [templateOwner, templateRepoName] = sandbox.challenge.templateRepo.split("/")
     const forkName = `bridgedev-${sandbox.challenge.slug}`
-    const forkOwner = sandbox.user.githubLogin
+    const forkOwner = githubLogin
 
     try {
       // Cria fork do template na conta pessoal do usuário (ignora se já existir)

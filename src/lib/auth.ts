@@ -26,17 +26,17 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn({ user, account, profile }) {
-      if (account?.provider === "github" && profile) {
+      if (account?.provider === "github" && profile && user.email) {
         const githubProfile = profile as { login: string; id: number }
         await db.user
           .update({
-            where: { id: user.id },
+            where: { email: user.email },
             data: {
               githubLogin: githubProfile.login,
               githubId: githubProfile.id,
             },
           })
-          .catch(() => null)
+          .catch((err) => console.error("[auth] githubLogin update failed:", err))
       }
       return true
     },
