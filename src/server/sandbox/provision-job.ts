@@ -26,7 +26,6 @@ export const provisionSandbox = inngest.createFunction(
       throw new Error("Token OAuth do usuário não encontrado")
     }
 
-    // Usa token OAuth do usuário para criar o fork na conta pessoal dele
     const userGh = new Octokit({ auth: account.access_token })
 
     // Garante que o githubLogin está disponível — faz fallback à API se necessário
@@ -50,33 +49,39 @@ export const provisionSandbox = inngest.createFunction(
 
     try {
       // Cria fork do template na conta pessoal do usuário (ignora se já existir)
-      await userGh.repos.createFork({
-        owner: templateOwner,
-        repo: templateRepoName,
-        name: forkName,
-        default_branch_only: true,
-      }).catch((err: { status?: number }) => {
-        if (err.status === 422) return
-        throw err
-      })
+      try {
+        await userGh.repos.createFork({
+          owner: templateOwner,
+          repo: templateRepoName,
+          name: forkName,
+          default_branch_only: true,
+        })
+      } catch (err: unknown) {
+        const e = err as { status?: number }
+        if (e.status !== 422) throw err
+        // 422 = fork já existe na conta — continua normalmente
+      }
 
       // GitHub cria forks de forma assíncrona
       await new Promise((r) => setTimeout(r, 6000))
 
       // Configura webhook no fork via token do usuário (ignora se já existir)
-      await userGh.repos.createWebhook({
-        owner: forkOwner,
-        repo: forkName,
-        config: {
-          url: env.GITHUB_WEBHOOK_PROXY_URL ?? `${env.NEXT_PUBLIC_APP_URL}/api/webhooks/github`,
-          content_type: "json",
-          secret: env.GITHUB_WEBHOOK_SECRET,
-        },
-        events: ["push", "pull_request", "check_run", "workflow_run"],
-      }).catch((err: { status?: number; message?: string }) => {
-        if (err.status === 422 && err.message?.includes("already exists")) return
-        throw err
-      })
+      try {
+        await userGh.repos.createWebhook({
+          owner: forkOwner,
+          repo: forkName,
+          config: {
+            url: env.GITHUB_WEBHOOK_PROXY_URL ?? `${env.NEXT_PUBLIC_APP_URL}/api/webhooks/github`,
+            content_type: "json",
+            secret: env.GITHUB_WEBHOOK_SECRET,
+          },
+          events: ["push", "pull_request", "check_run", "workflow_run"],
+        })
+      } catch (err: unknown) {
+        const e = err as { status?: number }
+        if (e.status !== 422) throw err
+        // 422 = webhook já existe no repositório — continua normalmente
+      }
 
       await db.sandbox.update({
         where: { id: sandboxId },
