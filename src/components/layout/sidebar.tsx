@@ -19,6 +19,16 @@ const NAV = [
 export function Sidebar({ user }: Props) {
   const pathname = usePathname()
 
+  const firstName = user.name?.split(" ")[0] ?? "Usuário"
+  const initials =
+    user.name
+      ?.split(" ")
+      .slice(0, 2)
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase() ?? "?"
+  const planLabel = user.plan === "B2B" ? "Empresa" : "Estudante"
+
   return (
     <aside className="w-56 border-r border-zinc-200 dark:border-zinc-800 flex flex-col py-6 px-3 bg-white dark:bg-zinc-950">
       <div className="px-3 mb-8">
@@ -50,7 +60,15 @@ export function Sidebar({ user }: Props) {
 
       <div className="border-t border-zinc-200 dark:border-zinc-800 pt-4 px-3 space-y-2">
         <ThemeToggle />
-        <p className="text-xs text-zinc-400 truncate px-3">{user.name}</p>
+        <div className="flex items-center gap-2 px-3 py-1">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-600 to-purple-700 flex items-center justify-center text-white text-xs font-bold shrink-0">
+            {initials}
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs text-zinc-700 dark:text-zinc-300 truncate font-medium">{firstName}</p>
+            <p className="text-[10px] text-violet-500 dark:text-violet-400 font-medium">{planLabel}</p>
+          </div>
+        </div>
         <SignOutButton />
       </div>
     </aside>

@@ -82,9 +82,33 @@ export function SandboxView({ sandbox: initial }: { sandbox: SandboxFull }) {
       )}
 
       {sandbox.status === "PROVISIONING" && (
-        <div className="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 rounded-xl p-4 text-sm text-zinc-500 dark:text-zinc-400 space-y-1">
-          <p>Criando fork do repositório do desafio...</p>
-          <p>Isso leva cerca de 30–60 segundos.</p>
+        <div className="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-100 dark:border-zinc-800 rounded-xl p-5">
+          <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-200 mb-4">
+            Preparando seu ambiente
+          </p>
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center shrink-0">
+                <span className="text-emerald-600 dark:text-emerald-400 text-xs">✓</span>
+              </div>
+              <span className="text-sm text-zinc-400 dark:text-zinc-500 line-through">
+                Criando fork do repositório
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 rounded-full border-2 border-violet-500 border-t-transparent animate-spin shrink-0" />
+              <span className="text-sm text-violet-600 dark:text-violet-400 font-medium">
+                Configurando webhook...
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 rounded-full border-2 border-zinc-200 dark:border-zinc-700 shrink-0" />
+              <span className="text-sm text-zinc-400 dark:text-zinc-500">
+                Pronto para começar
+              </span>
+            </div>
+          </div>
+          <p className="text-xs text-zinc-400 mt-4">Isso leva cerca de 30–60 segundos.</p>
         </div>
       )}
 
